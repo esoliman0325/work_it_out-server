@@ -1,6 +1,7 @@
-const app = require('./app')
-const { PORT, DB_URL } = require('./config')
-const knex = require(knex)
+const app = require('./app');
+const { PORT, DB_URL } = require('./config');
+const knex = require("knex");
+const addWorkoutsRouter = require('./Add Workouts/addworkouts-router')
 
 const db = knex({
   client: 'pg',
