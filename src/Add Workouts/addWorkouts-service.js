@@ -19,25 +19,42 @@ const addWorkoutsService = {
 		
 	// addWorkout(knex, workout) {
 	// 	return knex.select("*").from("workouts");
-  //   },
+	//   },
+	
+	checkBody(knex, newBody) {
+		return knex
+			.select(newBody)
+			.from('body')
+			.returning('id')
+	},
+
 	addBody(knex, newBody, newWorkout) {
+		console.log('addbody')
 		return knex
 			.insert(newBody)
 			.into('body')
 			.returning('id')
-				.then(id => {
-					.insert(newWorkout)
+			.then(id => {
+				let strID = id.toString()
+				let workout = {body_part_id: strID, ...newWorkout}
+				return knex
+				//shouldnt need first insert because above
+					// .insert({ body_part_id: strID })
+					// .into('workout')
+					.insert(workout)
+					// .insert(newWorkout)
 					.into('workout')
-					.where('body_part_id', '=', id)
-				})
+			})
+			// .then(retu=> console.log(retu))
 	},
 
-	addWorkout(knex, newWorkout) {
+	addWorkout(knex, newWorkout, id) {
+		console.log(id, 'addbody')
+		let strID = id.toString()
+		let workout = {body_part_id: strID, ...newWorkout}
 		return knex
-			.insert(newWorkout)
+			.insert(workout)
 			.into('workout')
-			.where()
-			.returning('*')
 			// .then(newWorkout => {
 			// 		console.log(newWorkout[0])
 			// })

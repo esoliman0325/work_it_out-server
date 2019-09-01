@@ -17,7 +17,7 @@ addWorkoutsRouter
 						const { body_part, exercise, sets, reps, weight, date } = req.body;
 						let validateData = { body_part, exercise, sets, reps, weight, date };
             let newBody = { body_part, date };
-						let newWorkout = { exercise, sets, reps, weight };
+						let newWorkout = { exercise: exercise, sets: String(sets), reps: String(reps), weight: String(weight) };
 						
             console.log(newWorkout, 'new workout body');
 						console.log(newBody, 'new body body');
@@ -29,16 +29,34 @@ addWorkoutsRouter
 											.status(400)
 											.send({ error: { message: `'${field}' is required` } });
 							}
-					}
-            addWorkoutsService.addBody(req.app.get('db'), newBody)
-                .then(bodyEntry => {
-									console.log(bodyEntry[0], 'posted body')
-                })
-                // .then(addWorkoutsService.addWorkout(req.app.get('db'), newWorkout))
-                // .then(workoutEntry => {
-                //     console.log(workoutEntry, 'posted workout');
-                // })
-                // .catch(next);
+						}
+						
+						addWorkoutsService.checkBody(req.app.get('db'), newBody)
+						console.log('main call')
+							.then(id => {
+								// need to say if (body and date already exist)
+								console.log(id, 'id if exists')
+								if (id) {
+									addWorkoutService.addWorkout(req.app.get('db'), newWorkout, id)
+										.then(res => res.status(201))
+										.catch(next)
+								} else {
+									console.log('mid call')
+									addWorkoutService.addBody(req.app.get('db'), newBody, newWorkout)
+										.then(res => res.status(201))
+										.catch(next)
+									console.log('end call')
+								}
+							})
+							.catch(next)
+
+
+            // addWorkoutsService.addBody(req.app.get('db'), newBody, newWorkout)
+						// 	.then(res => {
+						// 		res
+						// 			.status(201)
+						// 	})
+						// 	.catch(next);
         })
     // .post(bodyParser, (req, res, next) => {
     //     const { bodyP } = req.body;
