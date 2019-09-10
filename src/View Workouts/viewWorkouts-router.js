@@ -18,12 +18,22 @@ viewWorkoutsRouter
             let first = firstDay;
             let last = lastDay;
             // use date to query for individual workout...may have to do some date translation from f/e to b/e and vice versa
-            viewWorkoutsService.getAllWorkouts(req.app.get("db"), first, last)
-                .then(entry => {
-                    res.json(entry);
+            viewWorkoutsService.getAllBody(req.app.get('db'), first, last)
+                .then(body => {
+                console.log(body, 'body')
+                viewWorkoutsService.getAllWorkouts(req.app.get('db'), first, last)
+                    .then(workouts => {
+                        console.log(workouts, 'workouts')
+                    
+                    viewWorkoutsService.getAll(req.app.get('db'), first, last)
+                        .then(all => {
+                            console.log(all, 'all')
+                            res.json({all: all, body: body, workouts: workouts})
+                        })
+                    })
                 })
-                .catch(console.log('err'));
-    })
+                .catch(next);
+        })
     // .post(bodyParser, (req, res, next) => {
     //     console.log(req.body);
     //     const newBody = req.body;

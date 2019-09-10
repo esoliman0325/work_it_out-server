@@ -11,6 +11,8 @@ const serializeBody = body => ({
     date: xss(body.date)
 });
 
+// delete workouts...check if workout has parent reference, if so then don't delete, otherwise delete
+
 addWorkoutsRouter
     .route("/")
         .post(bodyParser, (req, res, next) => {
@@ -20,7 +22,7 @@ addWorkoutsRouter
 						let newWorkout = { exercise: exercise, sets: String(sets), reps: String(reps), weight: String(weight) };
 						
             console.log(newWorkout, 'new workout body');
-						console.log(newBody, 'new body body');
+						console.log(newBody.body_part, 'new body body');
 
 						for (const field of ['body_part', 'exercise', 'sets', 'reps', 'weight', 'date']) {
 							if (!validateData[field]) {
@@ -32,20 +34,32 @@ addWorkoutsRouter
 						}
 						
 						addWorkoutsService.checkBody(req.app.get('db'), newBody)
-						console.log('main call')
+						// console.log('main call')
 							.then(id => {
+								console.log(id, 'id length')
 								// need to say if (body and date already exist)
-								console.log(id, 'id if exists')
+								// console.log(id, 'id if exists')
 								if (id) {
-									addWorkoutService.addWorkout(req.app.get('db'), newWorkout, id)
-										.then(res => res.status(201))
+									addWorkoutsService.addWorkout(req.app.get('db'), newWorkout, id)
+										.then(workout => {
+											console.log(workout, 'post response')
+											res
+												.status(201)
+												.json(workout)
+										
+										})
 										.catch(next)
 								} else {
-									console.log('mid call')
-									addWorkoutService.addBody(req.app.get('db'), newBody, newWorkout)
-										.then(res => res.status(201))
+									// console.log('mid call')
+									addWorkoutsService.addAll(req.app.get('db'), newBody, newWorkout)
+										.then(workout => {
+											console.log(workout, 'post response')
+											res
+												.status(201)
+												.json(workout)
+										})
 										.catch(next)
-									console.log('end call')
+									// console.log('end call')
 								}
 							})
 							.catch(next)
@@ -57,7 +71,7 @@ addWorkoutsRouter
 						// 			.status(201)
 						// 	})
 						// 	.catch(next);
-        })
+				})
     // .post(bodyParser, (req, res, next) => {
     //     const { bodyP } = req.body;
     //     const newBody = { bodyP };

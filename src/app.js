@@ -6,6 +6,7 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('../postgrator-config')
 const viewWorkoutsRouter = require('./View Workouts/viewWorkouts-router')
 const addWorkoutsRouter = require('./Add Workouts/addworkouts-router')
+const deleteWorkoutsRouter = require('./deleteWorkouts/deleteWorkouts-router')
 
 const app = express()
 
@@ -19,9 +20,8 @@ app.use(cors())
 
 // 1) all fields required - must validate exist
 // 2) 
-app.use('/viewworkouts', viewWorkoutsRouter);
-
-app.use('/addworkouts', addWorkoutsRouter)
+app.use('/viewworkouts', viewWorkoutsRouter, deleteWorkoutsRouter);
+app.use('/addworkouts', addWorkoutsRouter);
 //app.use("/api/workouts", workoutsRouter);
 
 
@@ -75,8 +75,8 @@ app.use(function errorHandler(error, req, res, next) {
 	if (NODE_ENV === 'production') {
 		response = { error: { message: 'server error' } }
 	} else {
-		console.error(error, 'errorrrrrrrr')
 		response = { message: error.message, error }
+		console.log(response, 'response')
 	}
 	res.status(500).json(response)
 })

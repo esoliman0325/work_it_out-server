@@ -1,63 +1,85 @@
 const addWorkoutsService = {
-	// addWorkout(knex, ) {
-	// 	return knex
-	// 	.select(
-	// 			'body.id',
-	// 			'body.date',
-	// 			'body.body_part',
-	// 			'workout.exercise',
-	// 			'workout.sets',  
-	// 			'workout.reps',
-	// 			'workout.weight',
-	// 	)
-	// 	.from('body')
-	// 	// .whereRaw('??::date = ?', ['date', date])
-	// 	.where('date', '=', `'${firstDay}'`)
-	// 	.where('date', '<=', `'${lastDay}'`)
-	// 	.leftJoin('workout', 'body.id', 'workout.body_part_id')
-	// 	},
-		
-	// addWorkout(knex, workout) {
-	// 	return knex.select("*").from("workouts");
-	//   },
 	
 	checkBody(knex, newBody) {
+		console.log('check body')
 		return knex
-			.select(newBody)
+			.select('*')
 			.from('body')
-			.returning('id')
+			.where('body_part', '=', `${newBody.body_part}`)
+			.andWhere('date', '=', `${newBody.date}`)
+			.returning('*')
+			.then(entry => {
+				console.log(entry, 'id\n\n\n')
+				if (entry.length > 0) {
+					return entry[0].id
+				}
+				false
+			})
 	},
 
-	addBody(knex, newBody, newWorkout) {
+	addAll(knex, newBody, newWorkout) {
 		console.log('addbody')
 		return knex
 			.insert(newBody)
 			.into('body')
 			.returning('id')
-			.then(id => {
-				let strID = id.toString()
-				let workout = {body_part_id: strID, ...newWorkout}
+			.then(bodyId => {
+				let bodyStrId = bodyId.toString()
+				let workout = {body_part_id: bodyStrId, ...newWorkout}
 				return knex
-				//shouldnt need first insert because above
-					// .insert({ body_part_id: strID })
-					// .into('workout')
 					.insert(workout)
-					// .insert(newWorkout)
 					.into('workout')
+					.returning('id')
 			})
-			// .then(retu=> console.log(retu))
+				.then(workoutId => {
+					console.log(workoutId, 'workoutId')
+					let workoutStrId = workoutId.toString()
+					return knex
+						.select(
+						'workout.exercise',
+						'workout.sets',  
+						'workout.reps',
+						'workout.weight',
+						'workout.id AS workoutId',
+						'workout.body_part_id AS body_id_reference',
+						'body.id AS body_id',
+						'body.date',
+						'body.body_part'
+						)
+						.from('workout')
+						.where('workout.id', '=', workoutStrId)
+						.leftJoin('body', 'workout.body_part_id', 'body.id')
+			})
+
 	},
 
 	addWorkout(knex, newWorkout, id) {
-		console.log(id, 'addbody')
+		console.log(id, 'id', 'addworkout')
 		let strID = id.toString()
 		let workout = {body_part_id: strID, ...newWorkout}
 		return knex
 			.insert(workout)
 			.into('workout')
-			// .then(newWorkout => {
-			// 		console.log(newWorkout[0])
-			// })
+			.returning('id')
+			.then(workoutId => {
+				console.log(workoutId, 'workoutId')
+				let workoutStrId = workoutId.toString()
+				return knex
+					.select(
+					'workout.exercise',
+					'workout.sets',  
+					'workout.reps',
+					'workout.weight',
+					'workout.id AS workoutId',
+					'workout.body_part_id AS body_id_reference',
+					'body.id AS body_id',
+					'body.date',
+					'body.body_part'
+					)
+					.from('workout')
+					.where('workout.id', '=', workoutStrId)
+					.leftJoin('body', 'workout.body_part_id', 'body.id')
+		})
   }
 }
 
