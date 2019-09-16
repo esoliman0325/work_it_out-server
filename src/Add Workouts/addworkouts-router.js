@@ -34,11 +34,8 @@ addWorkoutsRouter
 						}
 						
 						addWorkoutsService.checkBody(req.app.get('db'), newBody)
-						// console.log('main call')
 							.then(id => {
 								console.log(id, 'id length')
-								// need to say if (body and date already exist)
-								// console.log(id, 'id if exists')
 								if (id) {
 									addWorkoutsService.addWorkout(req.app.get('db'), newWorkout, id)
 										.then(workout => {
@@ -50,7 +47,6 @@ addWorkoutsRouter
 										})
 										.catch(next)
 								} else {
-									// console.log('mid call')
 									addWorkoutsService.addAll(req.app.get('db'), newBody, newWorkout)
 										.then(workout => {
 											console.log(workout, 'post response')
@@ -59,39 +55,9 @@ addWorkoutsRouter
 												.json(workout)
 										})
 										.catch(next)
-									// console.log('end call')
 								}
 							})
 							.catch(next)
-
-
-            // addWorkoutsService.addBody(req.app.get('db'), newBody, newWorkout)
-						// 	.then(res => {
-						// 		res
-						// 			.status(201)
-						// 	})
-						// 	.catch(next);
 				})
-    // .post(bodyParser, (req, res, next) => {
-    //     const { bodyP } = req.body;
-    //     const newBody = { bodyP };
-        // for (const field of ["body_part", "date"]) {
-        //     if (!newBody[field]) {
-        //         logger.error(`${field} is required`);
-        //         return res
-        //             .status(400)
-        //             .send({ error: { message: `'${field}' is required` } });
-        //     }
-        // }
-
-    //     WorkoutsService.insertBody(req.app.get("db"), newBody)
-    //         .then(bodyPart => {
-    //             logger.info(`Body Part with id ${bodyPart.id} was added to list`);
-    //             res
-    //                 .status(201)
-    //                 .json(serializeFolder(bodyPart));
-    //         })
-    //         .catch(next);
-    // });
 
     module.exports = addWorkoutsRouter;

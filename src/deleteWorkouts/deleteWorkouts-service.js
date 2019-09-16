@@ -46,28 +46,6 @@ const deleteWorkoutsService = {
             .where('id', '=', `${workoutStrId}`)
             .delete()
             .returning('*')
-		// 	.insert(workout)
-		// 	.into('workout')
-		// 	.returning('id')
-		// 	.then(workoutId => {
-		// 		console.log(workoutId, 'workoutId')
-		// 		let workoutStrId = workoutId.toString()
-		// 		return knex
-		// 			.select(
-		// 			'workout.exercise',
-		// 			'workout.sets',  
-		// 			'workout.reps',
-		// 			'workout.weight',
-		// 			'workout.id AS workoutId',
-		// 			'workout.body_part_id AS body_id_reference',
-		// 			'body.id AS body_id',
-		// 			'body.date',
-		// 			'body.body_part'
-		// 			)
-		// 			.from('workout')
-		// 			.where('workout.id', '=', workoutStrId)
-		// 			.leftJoin('body', 'workout.body_part_id', 'body.id')
-		// })
   }
 }
 

@@ -29,7 +29,9 @@ deleteWorkoutsRouter
                         deleteWorkoutsService.deleteWorkout(req.app.get('db'), workout)
                             .then(workout => {
                                 console.log(workout, 'workout deleted')
-                                res.status(204)
+																res
+																	.status(204)
+																	.end()
                             
                             })
                             .catch(next)
@@ -39,7 +41,9 @@ deleteWorkoutsRouter
                         deleteWorkoutsService.deleteAll(req.app.get('db'), workout, workoutBodyId)
                             .then(workout => {
                                 console.log(workout, 'body all deleted')
-                                res.status(204)
+																res
+																	.status(204)
+																	.end()
                             })
                             .catch(next)
                     }
