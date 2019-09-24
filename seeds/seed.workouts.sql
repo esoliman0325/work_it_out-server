@@ -1,11 +1,17 @@
-TRUNCATE TABLE workout, body RESTART IDENTITY CASCADE;
+TRUNCATE TABLE workout, body, userName RESTART IDENTITY;
 
-INSERT INTO body (body_part, date)
+INSERT INTO userName (user_full_name)
 	VALUES
-		('chest', '2019-8-22'),
-		('back', '2019-8-22'),
-		('arms', '2019-8-23'),
-		('triceps', '2019-8-23');
+		('Emad Soliman'),
+		('Philo Mina'),
+		('Cody Thomson');
+
+INSERT INTO body (body_part, date, user_full_name_id)
+	VALUES
+		('chest', '2019-8-22', 3),
+		('back', '2019-8-22', 2),
+		('biceps', '2019-8-23', 1),
+		('triceps', '2019-8-23', 1);
 
 INSERT INTO workout (exercise, sets, reps, weight, body_part_id)
 	VALUES
