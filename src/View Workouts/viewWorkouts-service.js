@@ -2,11 +2,12 @@ const viewWorkoutsService = {
     getAll(knex, firstDay, lastDay, user) {
         return knex
         .select(
-            'userName.user_full_name',
-            'userName.id',
+            'username.user_full_name',
+            'username.id',
             'body.id AS body_id',
             'body.date',
             'body.body_part',
+            'body.user_full_name_id',
             'workout.exercise',
             'workout.sets',  
             'workout.reps',
@@ -14,56 +15,46 @@ const viewWorkoutsService = {
             'workout.id AS workoutId',
             'workout.body_part_id AS body_id_reference'
         )
-        .from('userName')
+        .from('username')
         .where('user_full_name', '=', `${user}`)
-        .leftJoin('body', 'user.id', 'body.user_full_name_id')
-        .where('date', '>=', `'${firstDay}'`)
-        .andWhere('date', '<=', `'${lastDay}'`)
+        .leftJoin('body', 'username.id', 'body.user_full_name_id')
+        .where('body.date', '>=', `'${firstDay}'`)
+        .andWhere('body.date', '<=', `'${lastDay}'`)
         .leftJoin('workout', 'body.id', 'workout.body_part_id')
-        // .from('body')
-        // .where('date', '>=', `'${firstDay}'`)
-        // .andWhere('date', '<=', `'${lastDay}'`)
-        // .leftJoin('workout', 'body.id', 'workout.body_part_id')
     },
 
-    getAllBody(knex, firstDay, lastDay) {
+    getAllBody(knex, firstDay, lastDay, user) {
         return knex
-        .select('*'
-            // 'body.id',
-            // 'body.date',
-            // 'body.body_part',
-            // 'workout.exercise',
-            // 'workout.sets',  
-            // 'workout.reps',
-            // 'workout.weight',
+        .select(
+            'username.user_full_name',
+            'username.id',
+            'body.id',
+            'body.date',
+            'body.body_part',
+            'body.user_full_name_id'
         )
-        .from('body')
-        // .from('body')
-        // .whereRaw('??::date = ?', ['date', date])
-        .where('date', '>=', `'${firstDay}'`)
-        .andWhere('date', '<=', `'${lastDay}'`)
-        // .returning('id')
-        // .then(entries => {
-        //     entries.map(entry => entry.id {
-
-        //     }
-        //     ) 
-        //     // let strID = id.toString()
-        //     // return knex
-        //     //     .select('*')
-        //     //     .where(strID, '=', 'body_part_id')
-        // })
-        // .leftJoin('workout', 'body.id', 'workout.body_part_id')
+        .from('username')
+        .where('user_full_name', '=', `${user}`)
+        .leftJoin('body', 'username.id', 'body.user_full_name_id')
+        .where('body.date', '>=', `'${firstDay}'`)
+        .andWhere('body.date', '<=', `'${lastDay}'`)
     },
 
-    getAllWorkouts(knex, firstDay, lastDay) {
+    getAllWorkouts(knex, firstDay, lastDay, user) {
         return knex
-        .select('body.id')
-        .from('body')
-        // .from('body')
-        // .whereRaw('??::date = ?', ['date', date])
-        .where('date', '>=', `'${firstDay}'`)
-        .andWhere('date', '<=', `'${lastDay}'`)
+        .select(
+            'username.user_full_name',
+            'username.id',
+            'body.id',
+            'body.date',
+            'body.body_part',
+            'body.user_full_name_id'
+        )
+        .from('username')
+        .where('user_full_name', '=', `${user}`)
+        .leftJoin('body', 'username.id', 'body.user_full_name_id')
+        .where('body.date', '>=', `'${firstDay}'`)
+        .andWhere('body.date', '<=', `'${lastDay}'`)
         .then(bodyID => {
             let idArray = bodyID.map(body => body.id.toString())
             return knex
@@ -71,7 +62,6 @@ const viewWorkoutsService = {
                 .from('workout')
                 .whereIn('body_part_id', idArray)
         })
-        // .leftJoin('workout', 'body.id', 'workout.body_part_id')
     },
 }
 

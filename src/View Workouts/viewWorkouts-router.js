@@ -35,28 +35,6 @@ viewWorkoutsRouter
                 })
                 .catch(next);
         })
-    // .post(bodyParser, (req, res, next) => {
-    //     console.log(req.body);
-    //     const newBody = req.body;
-    //     console.log(newBody);
-    //     console.log(newBody.body_part);
-    //     console.log(newBody.date);
-    //     for (const field of ["body_part", "date"]) {
-    //         if (!newBody[field]) {
-    //             return res
-    //                 .status(400)
-    //                 .send({ error: { message: `'${field}' is required` } });
-    //         }
-    //     }
 
-    //     BodyPartsService.insertBodyParts(req.app.get("db"), newBody)
-    //         .then(bodyPart => {
-    //             console.log(`Body Part with id ${bodyPart.id} was added to list`);
-    //             res
-    //                 .status(201)
-    //                 .json(serializeBody(bodyPart));
-    //         })
-    //         .catch(next);
-    // });
 
 module.exports = viewWorkoutsRouter;

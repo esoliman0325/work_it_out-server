@@ -1,10 +1,10 @@
 TRUNCATE TABLE workout, body, userName RESTART IDENTITY;
 
-INSERT INTO userName (user_full_name)
+INSERT INTO username (user_full_name)
 	VALUES
 		('Emad Soliman'),
 		('Philo Mina'),
-		('Cody Thomson');
+		('George Soliman');
 
 INSERT INTO body (body_part, date, user_full_name_id)
 	VALUES
