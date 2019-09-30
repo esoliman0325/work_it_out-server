@@ -3,4 +3,5 @@ module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     API_TOKEN: process.env.API_TOKEN || 'dummy-api-token',
     DB_URL: process.env.DB_URL || 'postgresql://dunder-mifflin@localhost/bookmarks',
+    CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000'
   }
