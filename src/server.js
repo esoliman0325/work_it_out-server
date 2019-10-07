@@ -1,5 +1,5 @@
 const app = require('./app');
-const { PORT, DB_URL, API_TOKEN } = require('./config');
+const { PORT, DATABASE_URL } = require('./config');
 const knex = require("knex");
 
 const db = knex({
