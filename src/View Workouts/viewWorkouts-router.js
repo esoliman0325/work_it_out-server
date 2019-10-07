@@ -12,21 +12,19 @@ const serializeBody = body => ({
 });
 
 viewWorkoutsRouter
-    .route('/:firstDay/:lastDay/:userName')
+    .route('/:userName')
         .get((req, res, next) => {
-            let { firstDay, lastDay, userName } = req.params;
-            let first = firstDay;
-            let last = lastDay;
+            let { userName } = req.params;
             let user = userName;
             // use date to query for individual workout...may have to do some date translation from f/e to b/e and vice versa
-            viewWorkoutsService.getAllBody(req.app.get('db'), first, last, user)
+            viewWorkoutsService.getAllBody(req.app.get('db'), user)
                 .then(body => {
                 console.log(body, 'body')
-                viewWorkoutsService.getAllWorkouts(req.app.get('db'), first, last, user)
+                viewWorkoutsService.getAllWorkouts(req.app.get('db'), user)
                     .then(workouts => {
                         console.log(workouts, 'workouts')
                     
-                    viewWorkoutsService.getAll(req.app.get('db'), first, last, user)
+                    viewWorkoutsService.getAll(req.app.get('db'), user)
                         .then(all => {
                             console.log(all, 'all')
                             res.json({all: all, body: body, workouts: workouts})

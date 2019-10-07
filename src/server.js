@@ -1,7 +1,6 @@
 const app = require('./app');
-const { PORT, DB_URL } = require('./config');
+const { PORT, DB_URL, API_TOKEN } = require('./config');
 const knex = require("knex");
-const addWorkoutsRouter = require('./Add Workouts/addworkouts-router')
 
 const db = knex({
   client: 'pg',
@@ -11,5 +10,5 @@ const db = knex({
 app.set('db', db)
 
 app.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}, ${process.env.API_TOKEN}, process env var`)
+  console.log(`Server listening at http://localhost:${PORT}`)
 })

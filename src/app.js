@@ -15,16 +15,29 @@ const morganOption = (NODE_ENV === 'production') ? 'tiny' : 'common';
 	
 app.use(morgan(morganOption))
 app.use(helmet())
-app.use(cors({origin: CLIENT_ORIGIN}))
+app.use(cors())
 
 
-// add validate bearer token middleware
+
+// validate bearer token middleware
+app.use(function validateBearerToken(req, res, next) {
+	const apiToken = process.env.API_TOKEN
+	const authToken = req.get('Authorization')
+  
+	if (!authToken || authToken.split(' ')[1] !== apiToken) {
+	  return res.status(401).json({ error: 'Unauthorized request' })
+	}
+	next()
+  })
+  
+// routing  
 app.use('/viewworkouts', viewWorkoutsRouter, deleteWorkoutsRouter);
 app.use('/addworkouts', addWorkoutsRouter);
 
-
+//error handler
 app.use(function errorHandler(error, req, res, next) {
 	let response
+
 	if (NODE_ENV === 'production') {
 		response = { error: { message: 'server error' } }
 	} else {
