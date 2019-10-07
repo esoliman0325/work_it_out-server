@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const {CLIENT_ORIGIN} = require('./config');
+const { API_TOKEN } = require('./config');
 const helmet = require('helmet')
 const { NODE_ENV } = require('../postgrator-config')
 const viewWorkoutsRouter = require('./View Workouts/viewWorkouts-router')
@@ -18,10 +18,9 @@ app.use(helmet())
 app.use(cors())
 
 
-
 // validate bearer token middleware
 app.use(function validateBearerToken(req, res, next) {
-	const apiToken = process.env.API_TOKEN
+	const apiToken = API_TOKEN
 	const authToken = req.get('Authorization')
   
 	if (!authToken || authToken.split(' ')[1] !== apiToken) {
