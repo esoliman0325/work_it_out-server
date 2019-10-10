@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const { API_TOKEN } = require('./config');
+const { API_TOKEN, PORT, DATABASE_URL } = require('./config');
 const helmet = require('helmet')
 const { NODE_ENV } = require('../postgrator-config')
 const viewWorkoutsRouter = require('./View Workouts/viewWorkouts-router')
@@ -38,7 +38,7 @@ app.use(function errorHandler(error, req, res, next) {
 	let response
 
 	if (NODE_ENV === 'production') {
-		response = { error: { message: 'server error' } }
+		response = { error: { message: 'server error', db: DATABASE_URL } }
 	} else {
 		response = { error }
 		console.log(response, 'response')
