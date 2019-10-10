@@ -19,7 +19,8 @@ viewWorkoutsRouter
             // use date to query for individual workout...may have to do some date translation from f/e to b/e and vice versa
             viewWorkoutsService.getAllBody(req.app.get('db'), user)
                 .then(body => {
-                    if (body[0].body_part) {
+                    console.log(body, 'body before')
+                    if (body.length > 0 && body[0].body_part !== null) {
                     console.log(body, 'body')
                     viewWorkoutsService.getAllWorkouts(req.app.get('db'), user)
                         .then(workouts => {
@@ -28,9 +29,16 @@ viewWorkoutsRouter
                         viewWorkoutsService.getAll(req.app.get('db'), user)
                             .then(all => {
                                 console.log(all, 'all')
-                                res.json({all: all, body: body, workouts: workouts})
+                                res
+                                    .status(200)
+                                    .json({all: all, body: body, workouts: workouts})
                             })
                         })
+                    } if (body.length < 1 || body[0].body_part === null) {
+                        console.log('hello')
+                        res
+                            .status(204)
+                            .json({})
                     }
                 })
                 .catch(next);

@@ -1,4 +1,4 @@
-TRUNCATE TABLE workout, body, userName RESTART IDENTITY;
+TRUNCATE TABLE workout, body, username RESTART IDENTITY;
 
 INSERT INTO username (user_full_name)
 	VALUES
