@@ -1,4 +1,5 @@
 require('dotenv').config()
+console.log(process.env.DATABASE_URL) 
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
